@@ -1,0 +1,351 @@
+<!--保案录入-->
+<table class="ui table" style="text-align: center;height: 200px">
+  <thead>
+    <tr>
+      <th colspan="8">保单信息</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <th>保单号</th>
+    <th>{{policyDetail?.contractNo}}</th>
+    <th>投保人</th>
+    <th>{{policyDetail?.contractInfo?.applicant?.applicantname}}</th>
+    <th>被保人</th>
+    <th>{{policyDetail?.contractInfo?.policy?.insurename | insurenameFormat:policyDetail?.contractInfo?.insuredList:policyDetail?.contractInfo?.policy?.insurename}}</th>
+    <th>机构</th>
+    <th>{{getBranchName(policyDetail?.contractInfo?.branch)}}</th>
+  </tr>
+  <tr>
+    <th>投保日期</th>
+    <th>{{policyDetail?.contractInfo?.approveDate | date:"y-MM-dd HH:mm:ss"}}</th>
+    <th>出单日期</th>
+    <th>{{policyDetail?.contractInfo?.applyDate | date:"y-MM-dd HH:mm:ss"}}</th>
+    <th>起保日期</th>
+    <th>{{policyDetail?.contractInfo?.effectiveDate | date:"y-MM-dd HH:mm:ss  "}}</th>
+    <th>保费</th>
+    <th>{{policyDetail?.contractInfo?.totalModalPrem}}</th>
+  </tr>
+  <tr>
+    <th>产品名称</th>
+    <th>{{policyDetail?.contractInfo?.children[0]?.productName}}</th>
+    <th>保险公司</th>
+    <th>{{policyDetail?.contractInfo?.providerCode}}</th>
+    <th>止保日期</th>
+    <th>{{policyDetail?.contractInfo?.expiryDate | date:"y-MM-dd HH:mm:ss"}}</th>
+    <th>业务员</th>
+    <th>{{policyDetail?.contractInfo?.agentName}}</th>
+  </tr>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th>业务员手机号</th>
+    <th>{{policyDetail?.contractInfo?.agentTelephone}}</th>
+  </tr>
+  </tbody>
+</table>
+<table class="ui table">
+  <thead>
+    <tr>
+      <th colspan="8">报案信息</th>
+    </tr>
+  </thead>
+  <div class="ui four column grid">
+    <div class="six column row middle aligned">
+      <div class="column">出险日期</div>
+      <div class="ui calendar" id="startDateCal" >
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text"  [(ngModel)]="contractInfo.mainInfo.applyDate" [disabled]="policyDetail?.status!=0&&!isSave" name="startDate" id="startDate">
+          </div>
+      </div>
+      <div class="column">出险人姓名</div>
+      <div class="column">
+        <div class="ui input">
+          <input type="text" placeholder="出险人姓名" [(ngModel)]="contractInfo.mainInfo.name" [disabled]="policyDetail?.status!=0&&!isSave">
+        </div>
+      </div>
+      <div class="column">联系电话</div>
+      <div class="column">
+        <div class="ui input">
+          <input type="number" placeholder="联系电话" [(ngModel)]="contractInfo.mainInfo.mobile" [disabled]="policyDetail?.status!=0&&!isSave">
+        </div>
+      </div>
+    </div>
+    <div class="eight column row middle aligned">
+      <div class="column">出险省/市</div>
+      <div>
+        <app-three-link [area]="areaInAdrr"  (areaOut)="changeArea($event)"></app-three-link>
+      </div>
+      <div class="column">出险街道</div>
+      <div class="column">
+        <div>
+          <textarea rows="1" type="text" placeholder="出险街道" [(ngModel)]="contractInfo.mainInfo.applyAddr.detail" [disabled]="policyDetail?.status!=0&&!isSave"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="eight column row middle aligned">
+      <div class="column">证件类型</div>
+      <div class="column">
+        <select [(ngModel)]="contractInfo.mainInfo.idType" class="ui search dropdown" [disabled]="policyDetail?.status!=0&&!isSave">
+          <option *ngFor="let id of idType" value="{{id.code}}">{{id.value}}</option>
+        </select>
+      </div>
+      <div class="column">证件号码</div>
+      <div class="column">
+        <div class="ui input">
+          <input type="text" placeholder="请输入证件号" [(ngModel)]="contractInfo.mainInfo.idNo" [disabled]="policyDetail?.status!=0&&!isSave">
+        </div>
+      </div>
+
+    </div>
+    <div class="eight column row middle aligned">
+      <div class="column">出险情况</div>
+      <div class="column">
+        <div>
+          <textarea rows="10" cols="60" type="text" [(ngModel)]="contractInfo.mainInfo.applySituation" [disabled]="policyDetail?.status!=0&&!isSave"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <tr *ngIf="policyDetail?.status==0 || isSave">
+    <td colspan="8">
+      <div class="ui primary button" (click)="temporary()">暂存</div>
+      <div class="ui primary button" (click)="submit()">提交</div>
+      <div class="ui primary button" (click)="goBack()">返回</div>
+    </td>
+  </tr>
+</table>
+<!--受理信息-->
+<table  *ngIf="policyDetail?.status>0" class="ui column table" id="shouli" style="text-align: center">
+  <thead>
+    <tr>
+      <th colspan="8">受理信息</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 70px">
+    <th>操作时间</th>
+    <th style="text-align: left">
+      <div class="ui calendar">
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <input type="text" name="startDate"  value="{{acceptedData.postData.operationDate}}" [disabled]="policyDetail?.status!=0&&!isSave">
+        </div>
+      </div>
+      受理状态
+      <select class="ui search dropdown" [(ngModel)]="acceptedData.postData.transfer" [disabled]="policyDetail?.status!=1">
+        <option *ngFor="let accept of acceptedType" value="{{accept.code}}">{{accept.value}}</option>
+      </select>
+    </th>
+  </tr>
+  <tr>
+    <th>处理说明</th>
+    <th style="text-align: left">
+      <div>
+        <textarea name=""  cols="85" rows="10" [(ngModel)]="acceptedData.postData.remark" [disabled]="policyDetail?.status!=1"></textarea>
+      </div>
+    </th>
+  </tr>
+  <tr style="height: 70px;" *ngIf="acceptedData?.postData?.applyDataList.length==0">
+    <th>理赔资料清单</th>
+    <div class="ui primary button" (click)="acceptedSave()">新增</div>
+  </tr>
+  <tr style="height: 70px" *ngFor="let applyData of acceptedData?.postData?.applyDataList;let i = index;">
+    <th *ngIf="i==0">理赔资料清单</th>
+    <th *ngIf="i!==0"></th>
+   <th style="text-align: left">
+      <div class="ui input">
+        <input #apply type="text" style="width:400px" (change)="applyChange(i,apply.value)" value="{{applyData}}" [disabled]="policyDetail?.status!=1">
+      </div>
+      <button class="ui primary button" (click)="acceptedDelete(i)" *ngIf="policyDetail?.status==1">删除</button>
+      <button class="ui primary button" (click)="acceptedSave()" *ngIf="policyDetail?.status==1">新增</button>
+    </th>
+  </tr>
+  <tr>
+    <th>邮送地址</th>
+    <th>
+      <div style="text-align: left">
+        <textarea name=""  cols="85" rows="1" [(ngModel)]="acceptedData.postData.postAddr" [disabled]="policyDetail?.status!=1"></textarea>
+      </div>
+    </th>
+  </tr>
+  <tr *ngIf="policyDetail?.status==1">
+    <td colspan="6" style="text-align: right">
+      <div class="ui primary button" (click)="acceptedSubmit()" *ngIf="mTab!=6">提交</div>
+      <div class="ui primary button" (click)="goBack()">返回</div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<table class="ui column table" *ngIf="policyDetail?.status==2||policyDetail?.status==3||policyDetail?.status==4||(policyDetail?.status==5&&informationInfo.submitData.postDate)">
+  <thead>
+    <tr>
+      <th colspan="4">资料递交信息</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 70px;">
+      <th>递交理赔资料方式</th>
+      <th style="text-align: left">
+        <select class="ui search dropdown" [(ngModel)]="informationInfo.submitData.postWay" [disabled]="policyDetail?.status!=2">
+          <option value="{{way.code}}" *ngFor="let way of postWay">{{way.value}}</option>
+        </select>
+      </th>
+      <th>快递日期</th>
+      <th style="text-align: left">
+        <div class="ui calendar"  id="materialDateCal">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input id="startDate" name="startDate" [(ngModel)]="informationInfo.submitData.postDate" [disabled]="policyDetail?.status!=2">
+          </div>
+        </div>
+      </th>
+    </tr>
+    <tr *ngIf="informationInfo.submitData.postWay==2">
+      <th>快递公司</th>
+      <th style="text-align: left">
+        <div class="ui input">
+          <input type="text" [(ngModel)]="informationInfo.submitData.expressCompanyCode" [disabled]="policyDetail?.status!=2 ">
+          <select class="ui search down" [disabled]="policyDetail?.status!=2 " [(ngModel)]="informationInfo.submitData.expressCompanyCode">
+            <option value="{{compony.code}}" *ngFor="let compony of expressCompanys">{{compony.code}}</option>
+          </select>
+        </div>
+      </th>
+      <th>快递单号</th>
+      <th style="text-align: left">
+        <div class="ui input">
+          <input type="text" placeholder="快递单号" [(ngModel)]="informationInfo.submitData.expressNo" [disabled]="policyDetail?.status!=2">
+        </div>
+      </th>
+    </tr>
+    <tr *ngIf="informationInfo.submitData.postWay==2" style="height: 70px">
+       <th>操作时间</th>
+       <th style="text-align: left">
+        <div class="ui calendar">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" value="{{informationInfo.submitData.operationDate}}" disabled>
+          </div>
+        </div>
+      </th>
+       <th>处理状态</th>
+      <th style="text-align: left">
+        <select class="ui search dropdown">
+          <option value="">已提交资料</option>
+        </select>
+      </th>
+    </tr>
+    <tr>
+      <th>处理说明</th>
+      <th style="text-align: left">
+        <div>
+          <textarea name="" cols="60" rows="10" [(ngModel)]="informationInfo.submitData.remark" [disabled]="policyDetail?.status!=2"></textarea>
+        </div>
+      </th>
+    </tr>
+  <tr *ngIf="policyDetail?.status==2">
+    <td colspan="6" style="text-align: right">
+      <div class="ui primary button" (click)="submitPostData()" *ngIf="mTab!=6">提交</div>
+      <div class="ui primary button" (click)="goBack()">返回</div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<!--立案信息-->
+<table *ngIf="policyDetail?.status==3||policyDetail?.status==4||(policyDetail?.status==5&&registerInfo.registerData.remark)" class="ui column table">
+  <thead>
+    <tr>
+      <th colspan="4">立案信息</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 70px">
+      <th>操作时间</th>
+      <th style="text-align: left">
+        <div class="ui calendar">
+          <div class="ui input icon left">
+            <i class="icon calendar"></i>
+            <input type="text" id="" value="{{registerInfo.registerData.operationDate}}" disabled>
+          </div>
+        </div>
+      </th>
+      <th>立案状态</th>
+      <th style="text-align: left">
+        <select name="" class="ui search dropdown" [(ngModel)]="onFileTypevalue" [disabled]="policyDetail?.status!=3">
+          <option value="" *ngFor="let type of onFileType" value="{{type.code}}">{{type.value}}</option>
+        </select>
+      </th>
+    </tr>
+  <tr>
+    <th>处理说明</th>
+    <th style="text-align: left">
+      <div>
+        <textarea name="" cols="60" rows="10" [(ngModel)]="registerInfo.registerData.remark" [disabled]="policyDetail?.status!=3"></textarea>
+      </div>
+    </th>
+  </tr>
+  <tr *ngIf="policyDetail?.status==3">
+    <td colspan="6" style="text-align: right">
+      <div class="ui primary button" (click)="submitRegister()" *ngIf="mTab!=6">提交</div>
+      <div class="ui primary button" (click)="goBack()">返回</div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<table *ngIf="policyDetail?.status>3" class="ui  column table">
+  <thead>
+    <tr><th colspan="4">结案信息</th></tr>
+  </thead>
+  <tbody>
+    <tr style="height: 70px">
+      <th>操作时间</th>
+      <th style="text-align: left">
+        <div class="ui calendar">
+          <div class="ui input left icon">
+            <i class="icon calendar"></i>
+            <input type="text" value="{{settleDataInfo.settleData.operationDate}}" disabled>
+          </div>
+        </div>
+      </th>
+      <th>结案状态</th>
+      <th style="text-align: left">
+        <select name="" class="ui search dropdown" [(ngModel)]="closedCaseTypevalue" [disabled]="policyDetail?.status!=4">
+          <option value="{{closeCase.code}}" *ngFor="let closeCase of closedCaseType">{{closeCase.value}}</option>
+        </select>
+      </th>
+    </tr>
+    <tr style="height: 70px">
+      <th>处理说明</th>
+      <th style="text-align: left" colspan="3">
+        <div>
+          <textarea name=""  cols="60" rows="10" [(ngModel)]="settleDataInfo.settleData.remark" [disabled]="policyDetail?.status!=4"></textarea>
+        </div>
+      </th>
+    </tr>
+    <tr>
+      <td colspan="6" style="text-align: right">
+        <div *ngIf="policyDetail?.status==4&&mTab!=6" class="ui primary button" (click)="submitSettle()">提交</div>
+        <div  class="ui primary button" (click)="goBack()">返回</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="ui four column grid">
+  <div class="four column row">
+    <div class="column">操作人员</div>
+    <div class="column">操作时间</div>
+    <div class="column">状态</div>
+    <div class="column">状态详情</div>
+  </div>
+  <div class="four column row" *ngFor="let log of policyDetail?.logs">
+    <div class="column">{{log?.operatedBy}}</div>
+      <div class="column">{{log?.operatedAt| date:'yy-MM-dd HH:mm:ss'}}</div>
+    <div class="column">{{status[log?.endStatus]}}</div>
+    <div class="column">{{log?.detail}}</div>
+  </div>
+</div>

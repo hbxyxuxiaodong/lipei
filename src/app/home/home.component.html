@@ -1,0 +1,16 @@
+<div class="top-nav-wrap">
+  <div class="top-nav-one lf" style="margin-left: 70%">欢迎登陆乐游保-{{name}}</div>
+  <div class="menu-item-separator lf">&nbsp;|&nbsp;</div>
+  <div class="lf">
+    <a (click)="getLogout()" href="">安全退出</a>
+  </div>
+</div>
+<h3 class="hr3"></h3>
+<div class="ui grid widthMinHeight">“
+    <div class="one wide column"></div>
+    <div class="fourteen wide column">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="one wide column"></div>
+</div>
+

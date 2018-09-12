@@ -1,0 +1,9 @@
+<select name="province" class="ui search dropdown" [(ngModel)]="area.provinceName" (change)="provinceChange()">
+  <option *ngFor="let item of provinceData" value="{{item.name}}">{{item.name}}</option>
+</select>
+<select name="province" class="ui search dropdown" [(ngModel)]="area.cityName" (change)="cityChange()">
+  <option *ngFor="let item of cityData" value="{{item.name}}">{{item.name}}</option>
+</select>
+<select name="province" class="ui search dropdown" [(ngModel)]="area.townName" (change)="countryChange()">
+  <option *ngFor="let item of coutryData" value="{{item.name}}">{{item.name}}</option>
+</select>

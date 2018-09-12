@@ -1,0 +1,131 @@
+<div class="ui top attached tabular menu">
+  <a class="item active" id="status0" (click)="changeTab('0','status0',0)">
+    <label>保案录入</label>
+  </a>
+  <a class="item" id="status1" (click)="changeTab('1','status1',1)">
+    <label>已报案</label>
+  </a>
+  <a class="item" id="status2" (click)="changeTab('2','status2',1)">
+    <label>已受理</label>
+  </a>
+  <a  class="item" id="status3" (click)="changeTab('3','status3',3)">
+    <label>已提交资料</label>
+  </a>
+  <a class="item" id="status4" (click)="changeTab('4','status4',4)">
+    <label >已立案</label>
+  </a>
+  <a  class="item" id="status5" (click)="changeTab('5','status5',5)">
+    <label>已结案</label>
+  </a>
+  <a class="item" id="status6" (click)="changeTab('0,1,2,3,4,5','status6',6)">
+    <label>案件查询</label>
+  </a>
+</div>
+<div class="ui bottom attached tab segment active">
+  <table class="ui column table">
+    <tbody>
+    <tr *ngIf="mTab==5">
+      <td>保险公司 ：</td>
+      <td>
+        <select class="ui search dropdown" [(ngModel)]="providerCode" (change)="providerChange()">
+          <option *ngFor="let provide of mProviders" value="{{provide.value}}">{{provide.value}}</option>
+        </select>
+      </td>
+      <td>签约方 ：</td>
+      <td>
+        <select class="ui search dropdown" [(ngModel)]="partiesName" (change)="statusChange()">
+          <option *ngFor="let parties of partiesArray" value="{{parties.name}}">{{parties.name}}</option>
+        </select>
+      </td>
+      <td>机构 ：</td>
+      <td>
+        <select class="ui search dropdown" [(ngModel)]="brancheValue" (change)="statusChange()">
+          <option *ngFor="let branche of mBranches" value="{{branche.code}}">{{branche.name}}</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>保单号 ：</td>
+      <td>
+        <div class="ui input">
+          <input type="text" placeholder="保单号" class="ng-untouched ng-pristine ng-valid" [(ngModel)]="queryModel.policyNo">
+        </div>
+      </td>
+      <td>投保人 ：</td>
+      <td>
+        <div class="ui input">
+          <input type="text" placeholder="投保人" class="ng-untouched ng-pristine ng-valid" [(ngModel)]="queryModel.appliName">
+        </div>
+      </td>
+      <td>被保人 ：</td>
+      <td>
+        <div class="ui input">
+          <input type="text" placeholder="被保人" class="ng-untouched ng-pristine ng-valid" [(ngModel)]="queryModel.beniName">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>业务员 ：</td>
+      <td>
+        <div class="ui input">
+          <input type="text" placeholder="业务员" class="ng-untouched ng-pristine ng-valid" [(ngModel)]="queryModel.busiName">
+        </div>
+      </td>
+      <td>业务员手机号 ：</td>
+      <td>
+        <div class="ui input">
+          <input type="text" placeholder="业务员手机号" class="ng-untouched ng-pristine ng-valid" [(ngModel)]="queryModel.busiMobile">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="6">
+        <div class="ui primary button" (click)="queryPolicy()">查询</div>
+        <div class="ui primary button" *ngIf="mTab==0" (click)="save()">新增</div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <table class="ui table">
+    <thead>
+    <tr>
+      <th>保单号码</th>
+      <th>机构</th>
+      <th>产品名称</th>
+      <th>保险公司</th>
+      <th>业务员</th>
+      <th>业务员电话</th>
+      <th>投保人</th>
+      <th>被保人</th>
+      <th>起保日期</th>
+      <th>出险人</th>
+      <th>出险日期</th>
+      <th>案件状态</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let policy of policyInfoList|paginate: { itemsPerPage: 10, currentPage: p ,totalItems: total};let i = index">
+        <td>{{policy.contractNo}}</td>
+        <td>{{getBranchName(policy?.contractInfo?.branch)}}</td>
+        <td>{{policy?.contractInfo?.children[0]?.productName}}</td>
+        <td>{{policy?.contractInfo?.providerCode}}</td>
+        <td>{{policy?.contractInfo?.agentName}}</td>
+        <td>{{policy?.contractInfo?.agentTelephone}}</td>
+        <td>{{policy?.contractInfo?.applicant?.applicantname}}</td>
+        <td>{{policy?.contractInfo?.policy?.insurename}}</td>
+        <td>{{policy?.contractInfo?.effectiveDate | date:"y-MM-dd HH:mm:ss"}}</td>
+        <td>{{policy?.mainInfo?.name}}</td>
+        <td>{{policy?.mainInfo?.applyDate | date:"y-MM-dd HH:mm:ss"}}</td>
+        <td>{{status[policy?.status]}}</td>
+        <td>
+          <div class="ui primary button" (click)="operating(policy)">{{getButtonName()}}</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="pages">
+    <pagination-controls previousLabel="上一页" nextLabel="下一页" (pageChange)="p = $event; pageChanged({page: p})"></pagination-controls>
+  </div>
+</div>
+<button nz-button [nzType]="'primary'">测试按钮</button>

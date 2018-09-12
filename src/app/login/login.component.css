@@ -1,0 +1,105 @@
+#top {
+  background: #f3f3f3;
+  height: 28px;
+  padding-top: 5px;
+}
+#top p {
+  margin-left: 10%;
+  font-size: 0.86rem;
+}
+.logo_block {
+  height: 105px;
+  background: white;
+}
+.logo_block .logo_image_left {
+  width: 80px;
+  height: 80px;
+  margin-left: 10%;
+  float: left;
+  margin-top: 12.5px;
+}
+.logo_block .logo_image_middle {
+  float: left;
+  margin: 0 10px;
+}
+.logo_block .logo_image_middle img {
+  margin-top: 35px;
+  max-width: 100%;
+}
+.logo_block .logo_image_right {
+  float: left;
+  margin-top: 40px;
+  max-width: 100%;
+}
+@media screen and (max-width: 767px) {
+  .logo_block {
+    height: 60px;
+  }
+  .logo_block .logo_image_left {
+    width: 40px;
+    height: 40px;
+    margin: 10px 0 10px 15px;
+  }
+  .logo_block .logo_image_middle {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+  }
+  .logo_block .logo_image_middle img {
+    margin: 10px 0;
+  }
+  .logo_block .logo_image_right {
+    width: 200px;
+    margin-top: 25px;
+  }
+}
+.full {
+  background: url(../../assets/images/login_bg.jpg);
+  background-size: cover;
+}
+.full .ui.grid {
+  width: 100%;
+  margin: 0;
+}
+.full .ui.grid .column {
+  width: 360px;
+  margin: 150px auto 50px auto;
+  padding: 14px;
+}
+@media screen and (min-width: 1200px) {
+  .full .ui.grid .column {
+    margin-left: 800px ;
+    margin-top: 150px;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .full .ui.grid .column {
+    margin-top: 100px;
+    margin-left: 300px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .full .ui.grid .column {
+    padding: 0;
+    width: 300px;
+  }
+}
+.full .ui.grid .column .ui.segment.attached:first-child {
+  padding: 0 !important;
+  border: none;
+}
+.full .ui.grid .column .ui.segment.attached:first-child a {
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 2px solid #2c87cc;
+}
+.full .ui.grid .column .ui.segment.attached .field {
+  margin: 20px 0;
+}
+.full .ui.grid .column .ui.segment.attached .ui.left.icon.input {
+  width: 100%;
+}
+.full .ui.grid .column .ui.segment.attached button {
+  margin-top: 25px;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,44 @@
+<div class="field">
+  <div class="ui left icon input">
+    <i class="search icon"></i>
+    <input type="text" placeholder="请输入被保险人证件号码、保单号、被保险人" [(ngModel)]="query">
+  </div>
+  <div class="ui primary button" (click)="search()">
+    查询
+  </div>
+  <div class="ui primary button" (click)="goBack()">
+    返回
+  </div>
+</div>
+<table class="ui table" *ngIf="policyList">
+  <thead>
+    <tr>
+      <th>保单号码</th>
+      <th>机构</th>
+      <th>产品名称</th>
+      <th>保险公司</th>
+      <th>业务员</th>
+      <th>业务员电话</th>
+      <th>投保人</th>
+      <th>被保人</th>
+      <th>证件号码</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let policy of policyList">
+      <td>{{policy?.contractNo}}</td>
+      <td>{{getBranchName(policy?.branch)}}</td>
+      <td>{{policy?.children[0]?.productName}}</td>
+      <td>{{policy?.providerCode}}</td>
+      <td>{{policy?.agentName}}</td>
+      <td>{{policy?.agentTelephone}}</td>
+      <td>{{policy?.applicant?.applicantname}}</td>
+      <td>{{policy?.policy?.insurename|insurenameFormat:policy?.insuredList:policy?.policy?.insurename}}
+      <td>{{policy?.policy?.pidno | pidnoFormat:policy?.insuredList:policy?.policy?.pidno}}</td>
+      <td>
+          <div class="ui primary button" (click)="claims(policy)" style="margin-left: 20px;">申请理赔</div>
+      </td>
+    </tr>
+  </tbody>
+</table>

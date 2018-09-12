@@ -1,0 +1,40 @@
+<div id="top">
+  <p>{{title}}</p>
+</div>
+<div id="logo" class="logo_block">
+    <img src="../../../assets/images/lyb_logo.png" class="logo_image_left">
+  <div class="logo_image_middle">
+    <img src="../../../assets/images/ly_font_logo.png">
+  </div>
+    <img src="../../../assets/images/slogan.png" class="logo_image_right">
+</div>
+<div class="full">
+  <div class="ui center aligned grid">
+    <div class="column login_style">
+      <div class="ui attached segment">
+        <div class="ui fluid item teal menu">
+          <a class="red item">
+            <p>登录</p>
+          </a>
+        </div>
+      </div>
+      <div class="ui attached segment">
+        <form #loginForm="ngForm" >
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input type="text" placeholder="账号" required class="ng-dirty ng-touched ng-valid" name="name" [(ngModel)]="loginModel.username">
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input type="password" placeholder="密码" required class="ng-dirty ng-touched ng-invalid" name="password" [(ngModel)]="loginModel.password">
+            </div>
+          </div>
+          <button type="submit" class="ui fluid large blue submit button" [disabled]="!loginForm.valid" (click)="login()">登录</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

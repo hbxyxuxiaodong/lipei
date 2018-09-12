@@ -1,0 +1,15 @@
+.ui.table{
+  text-align: center;
+}
+.ui.table>div.ui.four{
+  margin: 10px;
+}
+#shouli div.calendar{
+  display: inline-block;
+  width:35%;
+}
+textarea{
+  border: 1px solid #e0e0e0;
+  border-radius: 4px ;
+  padding: 10px;
+}

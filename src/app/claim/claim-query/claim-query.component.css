@@ -1,0 +1,9 @@
+.ui.search.dropdown{
+  width:180px;
+}
+td[colspan='6']{
+  text-align: right;
+}
+a.item>label{
+  color:rgba(44, 135, 204, 1);font-family:'Microsoft YaHei'; font-size: 1.29rem;
+}
